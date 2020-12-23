@@ -46,6 +46,10 @@ public class ZammadRequest {
 		
 	}
 	
+	public void setEndPoint(String endPoint) {
+		this.endPoint = endPoint;
+	}
+	
 	public String getSortBy() {
 		return sort_by;
 	}

@@ -349,7 +349,7 @@ public class ZammadConnectionManager extends Thread {
 			zammad.dumpResponse(true);
 			zammad.start();
 
-			ZammadRequest req = new ZammadRequest("none", "users", "");
+			ZammadRequest req = new ZammadRequest("none", "ticket_articles/by_ticket/16", "");
 			ZammadResponse response = zammad.sendb(req);
 			// System.out.println("RESPONSE:" + response);
 			ArrayList<Object> entries = response.getEntries();
