@@ -234,15 +234,29 @@ public class ZammadConnectionManager extends Thread {
 		ZammadResponse response = null;
 		try {
 			String json = req.toString();
-			String u = protocol + "://" + host + api + "/" + req.endPoint + "?page=" + req.getOffset() + "&per_page=" + req.getLimit();
+			String u = protocol + "://" + host + api + "/" + req.endPoint;
+			if (req.getMethod().equals("")) {
+				if (req.getQuery() != null) u +="/search";
+				u += "?page=" + req.getOffset() + "&per_page=" + req.getLimit();
+				if (!req.getSortBy().equals("")) u +="&sort_by="+req.getSortBy();
+				if (!req.getOrderBy().equals("")) u += "&order_by="+req.getOrderBy();
+				if (req.getQuery() != null) u +="&query="+req.getQuery();
+			}
 			URL url = new URL(u);
-			System.out.println("CALLING:" + url.toString());
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setConnectTimeout(timeout);
-			con.setRequestMethod(json.equals("") ? "GET" : "POST");
+			
+			if (!req.getMethod().equals("")) {
+				con.setRequestMethod(req.getMethod());
+				
+			} else {
+				con.setRequestMethod(json.equals("") ? "GET" : "POST");
+			}
 			con.setUseCaches(false);
 			con.setInstanceFollowRedirects(false);
-
+			System.out.println("CALLING["+con.getRequestMethod()+"]:" + url.toString());
+			
+			
 			//--- Send request headers
 			con.setRequestProperty("Authorization", "Token token=" + token);
 			// con.setRequestProperty("Accept-Language", "" + Locale.getDefault().getLanguage());
@@ -265,6 +279,7 @@ public class ZammadConnectionManager extends Thread {
 			int length = con.getContentLength();
 			String mime = con.getContentType();
 
+			System.out.println("RESPONSE CODE:"+code+" LENGTH:"+length+" MIME:"+mime);
 			//--- Dump header headers (like session cookie)
 			Map<String, List<String>> headers = con.getHeaderFields();
 			Iterator<String> it = headers.keySet().iterator();

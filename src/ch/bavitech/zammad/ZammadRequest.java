@@ -14,6 +14,8 @@ public class ZammadRequest {
 	protected String signature = "";
 	protected String endPoint = "";
 	protected String userData = "";
+	protected String method = "";
+	protected String query = null;	//--- Search term, if not null add "/search" as endpoint
 	
 	HashMap<String, Object> fields = new HashMap<>();
 	
@@ -32,6 +34,39 @@ public class ZammadRequest {
 		this.limit = limit;
 	}
 	
+	/**
+	 * Search term, pass empty to use search endpoint, null to avoid search
+	 * @param query 
+	 */
+	public void setQuery(String query) {
+		this.query = query;
+	}
+	
+	/**
+	 * Return the search query (could be null to disable search endpoint)
+	 * @return 
+	 */
+	public String getQuery() {
+		return query;
+	}
+	
+	/**
+	 * Set custom method ""DELETE", "PUT"
+	 * 
+	 * 
+	 * @param method 
+	 */
+	public void setMethod(String method) {
+		this.method = method;
+	}
+	
+	/**
+	 * Default is empty, will be GET if params are empty, otherwhise POST
+	 * @return 
+	 */
+	public String getMethod() {
+		return method;
+	}
 	/**
 	 * order_by is "asc" or "desc", the sort_by is the column name
 	 * 
