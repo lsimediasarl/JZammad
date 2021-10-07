@@ -17,7 +17,12 @@ public class ZammadRequest {
 	protected String method = "";
 	protected String query = null;	//--- Search term, if not null add "/search" as endpoint
 	
-	HashMap<String, Object> fields = new HashMap<>();
+	protected HashMap<String, Object> fields = new HashMap<>();
+	
+	/**
+	 * Aditional headers
+	 */
+	protected HashMap<String, String> headers = new HashMap<>();
 	
 	public ZammadRequest(String signature, String endPoint, String userData) {
 		this.endPoint = endPoint;
@@ -34,7 +39,20 @@ public class ZammadRequest {
 		this.limit = limit;
 	}
 	
+	public void addHeader(String header, String value) {
+		headers.put(header, value);
+		
+	}
+	
 	/**
+	 * Return original list of additional headers
+	 * 
+	 * @return 
+	 */
+	public HashMap<String, String> getHeaders() {
+		return headers;
+	}
+	/** 
 	 * Search term, pass empty to use search endpoint, null to avoid search
 	 * @param query 
 	 */

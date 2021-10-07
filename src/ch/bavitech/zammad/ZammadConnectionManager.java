@@ -262,6 +262,12 @@ public class ZammadConnectionManager extends Thread {
 			// con.setRequestProperty("Accept-Language", "" + Locale.getDefault().getLanguage());
 			con.setRequestProperty("Content-Type", "application/json");
 			con.setRequestProperty("Accept", "application/json");
+			Iterator<String> it = req.getHeaders().keySet().iterator();
+			//--- Additional headers
+			while (it.hasNext()) {
+				String h = it.next();
+				con.setRequestProperty(h, req.getHeaders().get(h));
+			}
 			con.setDoOutput(true);
 			con.connect();
 
@@ -282,7 +288,7 @@ public class ZammadConnectionManager extends Thread {
 			System.out.println("RESPONSE CODE:"+code+" LENGTH:"+length+" MIME:"+mime);
 			//--- Dump header headers (like session cookie)
 			Map<String, List<String>> headers = con.getHeaderFields();
-			Iterator<String> it = headers.keySet().iterator();
+			it = headers.keySet().iterator();
 			while (it.hasNext()) {
 				String key = it.next();
 				if (key == null) continue;
