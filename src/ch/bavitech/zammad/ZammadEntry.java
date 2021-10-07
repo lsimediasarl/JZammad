@@ -54,6 +54,7 @@ public class ZammadEntry {
 	 * - ZammadEntry
 	 * - Array<Object>
 	 *
+	 * If field is not found return empty string
 	 * @param field
 	 * @return 
 	 */
