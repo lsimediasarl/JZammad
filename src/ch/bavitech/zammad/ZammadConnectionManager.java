@@ -250,7 +250,7 @@ public class ZammadConnectionManager extends Thread {
 					response.add((ZammadEntry) o);
 				}
 			}
-			if (entries.isEmpty()) break;
+			if (entries.size() < 100) break;
 			page++;
 		}
 		return response;
