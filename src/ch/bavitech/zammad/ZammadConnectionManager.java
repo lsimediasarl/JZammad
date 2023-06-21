@@ -229,6 +229,33 @@ public class ZammadConnectionManager extends Thread {
 	}
 
 	/**
+	 * Use the pagination to fetch all results (Zammad 6 has a bug with the order_by parameters)
+	 * 
+	 * @param req
+	 * @return 
+	 */
+	public ZammadResponse fetchAllResult(ZammadRequest req) {
+		ZammadResponse response = new ZammadResponse();
+		int page = 1;
+		while (true) {
+			req.setLimit(page, 100);
+			ZammadResponse tmp = sendRequest(req);
+			ArrayList<Object> entries = tmp.getEntries();
+			for (int i=0;i<entries.size();i++) {
+				Object o = entries.get(i);
+				if (o instanceof ZammadSys) {
+					response.add((ZammadSys) o);
+					
+				} else if (o instanceof ZammadEntry) {
+					response.add((ZammadEntry) o);
+				}
+			}
+			if (entries.isEmpty()) break;
+			page++;
+		}
+		return response;
+	}
+	/**
 	 * This method will call the Zammad api and return the response<p>
 	 *
 	 * If no request argument, use GET method, otherwise use POST
@@ -324,7 +351,7 @@ public class ZammadConnectionManager extends Thread {
 				}
 				File f = new File(folder,"Response.json");
 				FileOutputStream fout = new FileOutputStream(f);
-				fout.write(json.getBytes());
+				fout.write(bout.toString().getBytes());
 				fout.close();
 				
 				if (mime.startsWith("application/json")) {
@@ -373,13 +400,16 @@ public class ZammadConnectionManager extends Thread {
 
 	public static void main(String args[]) {
 		try {
-			String token = "";
+			String token = "XG745Y7us6Mweo6OBN7yUialScISW6CliLuOR7mIoj7jVJU3euY15F22dWjPO7Bo";
 
 			ZammadConnectionManager zammad = new ZammadConnectionManager("https", "tickets.lsi-media.ch", token, "/api/v1");
 			zammad.dumpResponse(true);
 			zammad.start();
 
-			ZammadRequest req = new ZammadRequest("none", "ticket_articles/by_ticket/16", "");
+			ZammadRequest req = new ZammadRequest("none", "tickets", "");
+			req.setSortBy("number", "desc");
+			req.setLimit(1, 100);
+			// ZammadRequest req = new ZammadRequest("none", "ticket_articles/by_ticket/16", "");
 			ZammadResponse response = zammad.sendb(req);
 			// System.out.println("RESPONSE:" + response);
 			ArrayList<Object> entries = response.getEntries();
@@ -387,9 +417,9 @@ public class ZammadConnectionManager extends Thread {
 				Object obj = entries.get(i);
 				if (obj instanceof ZammadEntry) {
 					ZammadEntry entry = (ZammadEntry) obj;
-					System.out.println("TICKET:" + entry.getField("id"));
-					System.out.println(entry);
-					System.out.println("===");
+					System.out.println("TICKET:" + entry.getField("number"));
+					// System.out.println(entry);
+					//System.out.println("===");
 				}
 			}
 
