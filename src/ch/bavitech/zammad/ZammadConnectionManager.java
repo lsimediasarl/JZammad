@@ -5,6 +5,8 @@
 package ch.bavitech.zammad;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -39,6 +41,7 @@ public class ZammadConnectionManager extends Thread {
 	int timeout = 15000;    //--- ms
 	boolean dump = false;
 
+	File folder = null;
 	ArrayList<ZammadRequest> queue = new ArrayList<>();
 	HashMap<String, ArrayList<ZammadConnectionListener>> listeners = new HashMap<>();
 
@@ -57,6 +60,8 @@ public class ZammadConnectionManager extends Thread {
 		this.api = api;
 		this.protocol = protocol;
 
+		folder = new File(System.getProperty("user.dir"),"Dumps"+File.separator+"Zammad");
+		folder.mkdirs();
 	}
 
 	//**************************************************************************
@@ -298,7 +303,7 @@ public class ZammadConnectionManager extends Thread {
 				for (String s:list) vals += "" + s + " ";
 
 			}
-
+			
 			if (code == HttpURLConnection.HTTP_OK) {
 				//--- Read response content
 				byte buffer[] = new byte[16384];
@@ -317,7 +322,11 @@ public class ZammadConnectionManager extends Thread {
 					System.out.println(bout.toString());
 					System.out.println("");
 				}
-
+				File f = new File(folder,"Response.json");
+				FileOutputStream fout = new FileOutputStream(f);
+				fout.write(json.getBytes());
+				fout.close();
+				
 				if (mime.startsWith("application/json")) {
 					//--- json form response
 					json = bout.toString();
