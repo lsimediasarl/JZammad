@@ -400,7 +400,7 @@ public class ZammadConnectionManager extends Thread {
 
 	public static void main(String args[]) {
 		try {
-			String token = "XG745Y7us6Mweo6OBN7yUialScISW6CliLuOR7mIoj7jVJU3euY15F22dWjPO7Bo";
+			String token = "";
 
 			ZammadConnectionManager zammad = new ZammadConnectionManager("https", "tickets.lsi-media.ch", token, "/api/v1");
 			zammad.dumpResponse(true);
