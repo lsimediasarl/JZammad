@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ch.bavitech.zammad;
+package ch.lsimedia.zammad;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

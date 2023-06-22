@@ -1,4 +1,4 @@
-package ch.bavitech.zammad;
+package ch.lsimedia.zammad;
 
 /**
  *
