@@ -272,7 +272,7 @@ public class ZammadConnectionManager extends Thread {
 				u += "?page=" + req.getOffset() + "&per_page=" + req.getLimit();
 				if (!req.getSortBy().equals("")) u +="&sort_by="+req.getSortBy();
 				if (!req.getOrderBy().equals("")) u += "&order_by="+req.getOrderBy();
-				if (req.getQuery() != null) u +="&query="+req.getQuery();
+				if (req.getQuery() != null) u +="&query="+(req.getQuery().equals("")?"*":req.getQuery());
 			}
 			URL url = new URL(u);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
